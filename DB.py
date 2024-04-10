@@ -9,10 +9,11 @@ class DB:
         except:
             print("Failed to connect to the db")
 
-    def test_query(self):
+    def get_all_rows_of_presence_table(self, table):
         with self.db_connection.cursor() as curs:
                 # simple single row system query
-                curs.execute("SELECT * FROM Presence")
+                curs.execute("SELECT * FROM " + table)
                 #get the rows returned
                 pg_rows = curs.fetchall()
-                print(pg_rows)
+                return pg_rows
+
