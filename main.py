@@ -1,5 +1,7 @@
 import tkinter
 from DB import DB
+from Query import Query
+from datetime import datetime, timedelta
 
 def create_room_set(all_rows):
     room_set = set()
@@ -9,23 +11,44 @@ def create_room_set(all_rows):
     return room_set
 
 #report = (mac,start-time,endtime) tuple
-def report_query(report):
+def report_query(mac, start_time, end_time):
+    query = Query()
+    query.set_start_time(adjust_time(start_time, "-"))
+    query.set_end_time(adjust_time(end_time, "-"))
+    query.set_user_id(mac.lower())
     pass
 
 #check = (mac,start-time,endtime) tuple
-def check_query(check):
+def check_query(mac, start_time, end_time, semantic_mode, contact_mode, time_threshold):
+    query = Query()
+    query.set_start_time(adjust_time(start_time, "-"))
+    query.set_end_time(adjust_time(end_time, "-"))
+    query.set_user_id(mac.lower()) 
+    query.set_semantic_mode(semantic_mode)
+    query.set_contact_mode(contact_mode)
+    query.set_time_threshold(time_threshold)
     pass
 
 #contact = (start,end) tuple
 '''
 contact_query: retrieve all users who have come in contact with an affected person
 '''
-def contact_query(start_time, end_time):
-    print("IN CONTACT QUERY")
-    print(start_time, end_time)
+def contact_query(start_time, end_time, semantic_mode, contact_mode, time_threshold):
+    query = Query()
+    query.set_start_time(adjust_time(start_time, "-"))
+    query.set_end_time(adjust_time(end_time, "-"))
+    query.set_semantic_mode(semantic_mode)
+    query.set_contact_mode(contact_mode)
+    query.set_time_threshold(time_threshold)
 
 
-
+def adjust_time(time, mode):
+    new_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+    if mode == "+":
+        new_time += timedelta(days=365 * 2)  # Adding 2 years
+    else:
+        new_time -= timedelta(days=365 * 2)  # Subtracting 2 years
+    return new_time.strftime("%Y-%m-%d %H:%M:%S")
 
 
 
